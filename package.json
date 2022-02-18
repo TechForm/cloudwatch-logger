@@ -1,8 +1,12 @@
 {
-  "name": "cloudwatch-logging",
+  "name": "@techform/cloudwatch-logger",
   "packageManager": "yarn@3.1.1",
   "author": "Techform",
   "version": "0.0.0",
+  "description": "A simple logger which outputs to files according to cloudwatch restrictions",
+  "main": "dist/index",
+  "source": "src/index",
+  "homepage": "https://github.com/TechForm/cloudwatch-logger",
   "devDependencies": {
     "@commitlint/cli": "16.2.1",
     "@commitlint/config-conventional": "16.2.1",
@@ -37,5 +41,20 @@
     "@aws-sdk/client-cloudwatch-logs": "3.51.0",
     "luxon": "2.3.0",
     "safe-stable-stringify": "2.3.1"
+  },
+  "keywords": [
+    "cloudwatch",
+    "aws",
+    "logging",
+    "logs",
+    "log"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TechForm/cloudwatch-logger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TechForm/cloudwatch-logger/issues"
   }
 }

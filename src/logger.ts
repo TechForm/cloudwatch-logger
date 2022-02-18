@@ -27,7 +27,7 @@ export default class Logger {
   private static logEvents = 0;
   private static fileSize = 0;
   private static fileCreatedAt = Date.now();
-  private static logger = new Logger('LOGGER');
+  private static logger: Logger;
   private static configured = false;
 
   static logsDir = join(__dirname, 'batches');
@@ -60,6 +60,7 @@ export default class Logger {
     Logger.format = format;
     Logger.standardFormat = standardFormat;
     Logger.configured = true;
+    Logger.logger = new Logger('LOGGER');
   }
 
   info(message: string): void;
@@ -142,6 +143,17 @@ export default class Logger {
       }
     } else if (props.message) {
       logEntry.message = props.message;
+    } else if (
+      !props.message &&
+      isObject(formatted) &&
+      (typeof formatted.message === 'string' ||
+        typeof formatted.message === 'number')
+    ) {
+      logEntry.message = `${formatted.message}`;
+      delete formatted.message;
+      if (Object.keys(formatted).length === 0) {
+        formatted = undefined;
+      }
     }
     if (
       (Logger.printToConsole && this.overridePrintToConsole !== false) ||
@@ -246,8 +258,14 @@ export default class Logger {
       return undefined;
     }
     try {
-      const newData = data;
-
+      let newData = data;
+      if (newData instanceof Error) {
+        newData = {
+          message: newData.message,
+          name: newData.name,
+          stack: newData.stack,
+        };
+      }
       if (standardFormatting) {
         if (isObject(newData)) {
           // generally i don't need the stack in a production build,

@@ -1,9 +1,12 @@
-const esbuild = require('esbuild');
-const { rm } = require('fs/promises');
-const { join } = require('path');
-const { argv } = require('process');
+import esbuild from 'esbuild';
+import { rm } from 'fs/promises';
+import { dirname, join } from 'path';
+import { argv, env } from 'process';
+import { fileURLToPath } from 'url';
 
-const production = process.env.NODE_ENV === 'production';
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const production = env.NODE_ENV === 'production';
 const watch = argv[2];
 
 // esbuild has not "clean build folder" option, so that must be done manually

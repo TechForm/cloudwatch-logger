@@ -13,3 +13,6 @@ node_modules
 !.yarn/versions
 
 .DS_STORE
+
+dist
+tmp

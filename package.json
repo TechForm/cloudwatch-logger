@@ -28,8 +28,8 @@
     "check": "tsc",
     "lint": "eslint . --ext .ts --max-warnings 0",
     "release": "semantic-release",
-    "build": "node ./scripts/esbuild.js",
-    "watch": "node ./scripts/esbuild.js --watch"
+    "build": "node ./scripts/esbuild.mjs",
+    "watch": "node ./scripts/esbuild.mjs --watch",
   },
   "dependencies": {
     "@aws-sdk/client-cloudwatch-logs": "3.51.0",

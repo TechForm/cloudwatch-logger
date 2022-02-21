@@ -9,8 +9,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const production = env.NODE_ENV === 'production';
 const watch = argv[2];
 
-// esbuild has not "clean build folder" option, so that must be done manually
-await rm(join(__dirname, '../build'), {
+// esbuild does not have "clean build folder" option, so that must be done manually
+await rm(join(__dirname, '../dist'), {
   force: true,
   recursive: true,
 });

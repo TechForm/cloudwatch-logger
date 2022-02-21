@@ -27,5 +27,5 @@
       { "exceptAfterSingleLine": true }
     ]
   },
-  "ignorePatterns": ["scripts"]
+  "ignorePatterns": ["scripts", "dist"]
 }

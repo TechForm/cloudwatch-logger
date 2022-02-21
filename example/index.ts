@@ -32,7 +32,7 @@ const notAConsoleLogger = new Logger('notConsole', false);
 
 notAConsoleLogger.error('This will not print to the console');
 
-// You can reconfigure the all logger instances multiple times
+// You can reconfigure all logger instances multiple times
 Logger.configure({
   logsDir: join(__dirname, 'tmp/anotherLogsDir'),
   printToConsole: false,

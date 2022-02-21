@@ -45,6 +45,12 @@ export default class Logger {
     this.overridePrintToConsole = printToConsole;
   }
 
+  /**
+   * Configures the logger
+   * This function is a utility function as you can set all these properties on the static class individually
+   * It is required to call this function once however to ensure proper initialization
+   * @param param0 The configuration for all logger instances
+   */
   static configure({
     logsDir,
     printToConsole = true,
@@ -63,8 +69,21 @@ export default class Logger {
     Logger.logger = new Logger('LOGGER');
   }
 
+  /**
+   * Logs a message with the tag "info"
+   * @param message The message to be logged
+   */
   info(message: string): void;
+  /**
+   * Logs data with the tag "info"
+   * @param message The message to be logged
+   */
   info(data: unknown): void;
+  /**
+   * Logs a message and data with the tag "info"
+   * @param message The message to be logged
+   * @param data An object of any type
+   */
   info(message: string, data: unknown): void;
   info(msgOrData: string | unknown, data?: unknown) {
     if (typeof msgOrData === 'string') {
@@ -81,8 +100,21 @@ export default class Logger {
     }
   }
 
+  /**
+   * Logs a message with the tag "warn"
+   * @param message The message to be logged
+   */
   warn(message: string): void;
+  /**
+   * Logs data with the tag "warn"
+   * @param message The message to be logged
+   */
   warn(data: unknown): void;
+  /**
+   * Logs a message and data with the tag "warn"
+   * @param message The message to be logged
+   * @param data An object of any type
+   */
   warn(message: string, data: unknown): void;
   warn(msgOrData: string | unknown, data?: unknown) {
     if (typeof msgOrData === 'string') {
@@ -99,8 +131,21 @@ export default class Logger {
     }
   }
 
+  /**
+   * Logs a message with the tag "error"
+   * @param message The message to be logged
+   */
   error(message: string): void;
+  /**
+   * Logs data with the tag "error"
+   * @param data An object of any type
+   */
   error(data: unknown): void;
+  /**
+   * Logs a message and data with the tag "error"
+   * @param message The message to be logged
+   * @param data An object of any type
+   */
   error(message: string, data: unknown): void;
   error(msgOrData: string | unknown, data?: unknown) {
     if (typeof msgOrData === 'string') {
@@ -226,6 +271,9 @@ export default class Logger {
     }
   }
 
+  /**
+   * Makes the logger write to a new file and resets it's internal counters
+   */
   static resetLogFile() {
     Logger.currentFile = randomUUID();
     Logger.logEvents = 0;
@@ -249,7 +297,7 @@ export default class Logger {
    * @param standardFormatting If the default formatting options should apply
    * @returns A formatted data object
    */
-  static formatData(
+  private static formatData(
     data: unknown,
     standardFormatting: boolean,
     format?: FormatFunc,

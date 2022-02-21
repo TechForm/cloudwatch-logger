@@ -33,7 +33,7 @@
     "check": "tsc --noEmit",
     "lint": "eslint . --ext .ts --max-warnings 0",
     "release": "semantic-release",
-    "build": "tsc --emitDeclarationOnly && node ./scripts/esbuild.mjs",
+    "build": "node ./scripts/esbuild.mjs && tsc --emitDeclarationOnly",
     "watch": "node ./scripts/esbuild.mjs --watch",
     "example": "ts-node ./example/index.ts"
   },

@@ -15,11 +15,13 @@ import { validateLogEntry } from '.';
 import Logger from './logger';
 import { RequiredRecord } from './types';
 
-interface Config {
+export interface InitCloudwatchLogsConfig {
   accessKeyId: string;
   secretAccessKey: string;
-  region: string;
-  logGroupName: string;
+  /** The region of the log group */ region: string;
+  /** The name of the target log group */ logGroupName: string;
+  /** The amount of millis to wait between log uploads. Defaults to 1 minute */ uploadInterval?: number;
+  /** The amount of millis to wait before creating a new logstream. Defaults to 24 hours. */ recreateLogStreamInterval?: number;
 }
 
 let logStreamName = randomUUID();
@@ -33,7 +35,11 @@ let logStreamReady = false;
 
 let logger: Logger | undefined;
 
-export function initCloudwatchLogs(config: Config) {
+/**
+ * Initializes a cloudwatch logs client, and uploads the logs every
+ * @param config The configuration required to communicate with a cloudwatch backend
+ */
+export function initCloudwatchLogs(config: InitCloudwatchLogsConfig) {
   logger = new Logger('CLOUDWATCH');
   newLogStreamInterval = setInterval(() => {
     if (logStreamReady) {
@@ -42,12 +48,12 @@ export function initCloudwatchLogs(config: Config) {
       clearInterval(newLogStreamInterval);
       initCloudwatchLogs(config);
     }
-  }, 1000 * 60 * 60 * 24);
+  }, config.recreateLogStreamInterval || 1000 * 60 * 60 * 24);
 
   if (!putLogsInterval) {
     putLogsInterval = setInterval(() => {
       putLogEvents();
-    }, 1000 * 60);
+    }, config.uploadInterval || 1000 * 60);
   }
   client = new CloudWatchLogsClient({
     region: config.region,
@@ -76,6 +82,11 @@ export function initCloudwatchLogs(config: Config) {
     });
 }
 
+/**
+ * Uploads the logs in Logger.logsDir to cloudwatch.
+ * initCloudwatchLogs has to be called prior to calling this function.
+ * @returns void
+ */
 export async function putLogEvents() {
   logger?.info('Putting logEvents to cloudwatch');
   if (!logStreamReady) {

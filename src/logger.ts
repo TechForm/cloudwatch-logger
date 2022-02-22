@@ -45,6 +45,12 @@ export default class Logger {
     this.overridePrintToConsole = printToConsole;
   }
 
+  /**
+   * Configures the logger
+   * This function is a utility function as you can set all these properties on the static class individually
+   * It is required to call this function once however to ensure proper initialization
+   * @param param0 The configuration for all logger instances
+   */
   static configure({
     logsDir,
     printToConsole = true,
@@ -53,18 +59,31 @@ export default class Logger {
     format,
     standardFormat = true,
   }: Config) {
-    Logger.logsDir = logsDir;
-    Logger.printToConsole = printToConsole;
-    Logger.rejectedLogsDir = rejectedLogsDir;
-    Logger.logToFile = writeToFile;
-    Logger.format = format;
-    Logger.standardFormat = standardFormat;
-    Logger.configured = true;
-    Logger.logger = new Logger('LOGGER');
+    this.logsDir = logsDir;
+    this.printToConsole = printToConsole;
+    this.rejectedLogsDir = rejectedLogsDir;
+    this.logToFile = writeToFile;
+    this.format = format;
+    this.standardFormat = standardFormat;
+    this.configured = true;
+    this.logger = new Logger('LOGGER');
   }
 
+  /**
+   * Logs a message with the tag "info"
+   * @param message The message to be logged
+   */
   info(message: string): void;
+  /**
+   * Logs data with the tag "info"
+   * @param message The message to be logged
+   */
   info(data: unknown): void;
+  /**
+   * Logs a message and data with the tag "info"
+   * @param message The message to be logged
+   * @param data An object of any type
+   */
   info(message: string, data: unknown): void;
   info(msgOrData: string | unknown, data?: unknown) {
     if (typeof msgOrData === 'string') {
@@ -81,8 +100,21 @@ export default class Logger {
     }
   }
 
+  /**
+   * Logs a message with the tag "warn"
+   * @param message The message to be logged
+   */
   warn(message: string): void;
+  /**
+   * Logs data with the tag "warn"
+   * @param message The message to be logged
+   */
   warn(data: unknown): void;
+  /**
+   * Logs a message and data with the tag "warn"
+   * @param message The message to be logged
+   * @param data An object of any type
+   */
   warn(message: string, data: unknown): void;
   warn(msgOrData: string | unknown, data?: unknown) {
     if (typeof msgOrData === 'string') {
@@ -99,8 +131,21 @@ export default class Logger {
     }
   }
 
+  /**
+   * Logs a message with the tag "error"
+   * @param message The message to be logged
+   */
   error(message: string): void;
+  /**
+   * Logs data with the tag "error"
+   * @param data An object of any type
+   */
   error(data: unknown): void;
+  /**
+   * Logs a message and data with the tag "error"
+   * @param message The message to be logged
+   * @param data An object of any type
+   */
   error(message: string, data: unknown): void;
   error(msgOrData: string | unknown, data?: unknown) {
     if (typeof msgOrData === 'string') {
@@ -226,17 +271,20 @@ export default class Logger {
     }
   }
 
+  /**
+   * Makes the logger write to a new file and resets it's internal counters
+   */
   static resetLogFile() {
-    Logger.currentFile = randomUUID();
-    Logger.logEvents = 0;
-    Logger.fileSize = 0;
-    Logger.fileCreatedAt = Date.now();
-    Logger.logger.info(`Reset logfile to ${Logger.currentFile}`);
+    this.currentFile = randomUUID();
+    this.logEvents = 0;
+    this.fileSize = 0;
+    this.fileCreatedAt = Date.now();
+    this.logger.info(`Reset logfile to ${this.currentFile}`);
   }
 
   private static async writeToFile(data: string, curFileName: string) {
     // ensure dir is present
-    await mkdir(Logger.logsDir, { recursive: true });
+    await mkdir(this.logsDir, { recursive: true });
 
     // write to file
     await appendFile(curFileName, data);
@@ -249,7 +297,7 @@ export default class Logger {
    * @param standardFormatting If the default formatting options should apply
    * @returns A formatted data object
    */
-  static formatData(
+  private static formatData(
     data: unknown,
     standardFormatting: boolean,
     format?: FormatFunc,
@@ -305,8 +353,12 @@ export default class Logger {
 
       return format ? format(newData) : newData;
     } catch (error) {
-      Logger.logger.error('Could not format logdata', error);
+      this.logger.error('Could not format logdata', error);
       return undefined;
     }
+  }
+
+  static getCurrentLogFile() {
+    return this.currentFile;
   }
 }

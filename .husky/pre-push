@@ -3,3 +3,4 @@
 
 yarn lint
 yarn check
+yarn test

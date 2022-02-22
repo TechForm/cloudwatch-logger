@@ -59,14 +59,14 @@ export default class Logger {
     format,
     standardFormat = true,
   }: Config) {
-    Logger.logsDir = logsDir;
-    Logger.printToConsole = printToConsole;
-    Logger.rejectedLogsDir = rejectedLogsDir;
-    Logger.logToFile = writeToFile;
-    Logger.format = format;
-    Logger.standardFormat = standardFormat;
-    Logger.configured = true;
-    Logger.logger = new Logger('LOGGER');
+    this.logsDir = logsDir;
+    this.printToConsole = printToConsole;
+    this.rejectedLogsDir = rejectedLogsDir;
+    this.logToFile = writeToFile;
+    this.format = format;
+    this.standardFormat = standardFormat;
+    this.configured = true;
+    this.logger = new Logger('LOGGER');
   }
 
   /**
@@ -275,16 +275,16 @@ export default class Logger {
    * Makes the logger write to a new file and resets it's internal counters
    */
   static resetLogFile() {
-    Logger.currentFile = randomUUID();
-    Logger.logEvents = 0;
-    Logger.fileSize = 0;
-    Logger.fileCreatedAt = Date.now();
-    Logger.logger.info(`Reset logfile to ${Logger.currentFile}`);
+    this.currentFile = randomUUID();
+    this.logEvents = 0;
+    this.fileSize = 0;
+    this.fileCreatedAt = Date.now();
+    this.logger.info(`Reset logfile to ${this.currentFile}`);
   }
 
   private static async writeToFile(data: string, curFileName: string) {
     // ensure dir is present
-    await mkdir(Logger.logsDir, { recursive: true });
+    await mkdir(this.logsDir, { recursive: true });
 
     // write to file
     await appendFile(curFileName, data);
@@ -353,8 +353,12 @@ export default class Logger {
 
       return format ? format(newData) : newData;
     } catch (error) {
-      Logger.logger.error('Could not format logdata', error);
+      this.logger.error('Could not format logdata', error);
       return undefined;
     }
+  }
+
+  static getCurrentLogFile() {
+    return this.currentFile;
   }
 }

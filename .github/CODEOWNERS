@@ -1,2 +1,2 @@
 /.github/workflows/ @Simon-TechForm @Viktor-TechForm
-# does this trigger the codeowners?
+/.github/CODEOWNERS @Viktor-TechForm

@@ -124,7 +124,10 @@ async function uploadFileToCloudwatch(file: string) {
         await mkdir(Logger.rejectedLogsDir, { recursive: true });
         await rename(
           filePath,
-          join(Logger.rejectedLogsDir, `${new Date().toISOString()}_${file}`),
+          join(
+            Logger.rejectedLogsDir,
+            `${new Date().toISOString().replaceAll(':', '-')}-${file}`,
+          ),
         );
       } catch (error) {
         logger?.error(
@@ -202,7 +205,10 @@ async function uploadFileToCloudwatch(file: string) {
             .map(value => stringify(value))
             .join('\n');
           await appendFile(
-            join(Logger.rejectedLogsDir, `${new Date().toISOString()}_${file}`),
+            join(
+              Logger.rejectedLogsDir,
+              `${new Date().toISOString().replaceAll(':', '-')}-${file}`,
+            ),
             stringToWrite,
           );
         } catch (error) {
@@ -217,7 +223,7 @@ async function uploadFileToCloudwatch(file: string) {
               filePath,
               join(
                 Logger.rejectedLogsDir,
-                `${new Date().toISOString()}_${file}`,
+                `${new Date().toISOString().replaceAll(':', '-')}-${file}`,
               ),
             );
           } catch (err) {
